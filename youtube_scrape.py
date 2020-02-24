@@ -16,6 +16,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from YoutubeSubtitleScrapper import YoutubeSubtitlesScraper
 
 # https://www.youtube.com/
+# https://www.analyticsvidhya.com/blog/2019/05/scraping-classifying-youtube-video-data-python-selenium/
+# https://codereview.stackexchange.com/questions/166010/scraping-all-closed-captions-subtitles-of-a-youtubes-creators-video-library
 
 #https://www.youtube.com/results?search_query=bbc
 
