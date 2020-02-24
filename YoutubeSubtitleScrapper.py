@@ -64,11 +64,3 @@ class YoutubeSubtitlesScraper:
         response = urllib.request.urlopen(subtitle_link)
         soup = BeautifulSoup(response, "lxml")
         return soup.get_text(strip=True)
-
-
-def create_file(filename, link, subtitles):
-    """Creates file for the subtitle."""
-    title = "".join([c for c in filename if c.isalpha() or c.isdigit() or c == ' ']).rstrip()
-    with open(title + '.txt', 'w') as subtitles_file:
-        subtitles_file.write('LINK: ' + link + '\n')
-        subtitles_file.write(subtitles)

@@ -30,6 +30,21 @@ from YoutubeSubtitleScrapper import YoutubeSubtitlesScraper
 driver = webdriver.Chrome()
 driver.get("YOUR_LINK_HERE")
 
-youtube_scraper = YoutubeSubtitlesScraper()
+ted_talk_youtube_scraper = YoutubeSubtitlesScraper('https://www.youtube.com/user/TEDtalksDirector')
 
+
+def create_file(filename, link, subtitles):
+    """Creates file for the subtitle."""
+    title = "".join([c for c in filename if c.isalpha() or c.isdigit() or c == ' ']).rstrip()
+    with open(title + '.txt', 'w') as subtitles_file:
+        subtitles_file.write('LINK: ' + link + '\n')
+        subtitles_file.write(subtitles)
+
+
+with ted_talk_youtube_scraper as scraper:
+    for filename, link, content in scraper.subtitles():
+        try:
+            create_file(filename, link, content)
+        except:
+            print("Can't create file for: " + filename + " : " + link)
 
