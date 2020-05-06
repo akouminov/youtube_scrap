@@ -19,20 +19,23 @@ from YoutubeSubtitleScrapper import YoutubeSubtitlesScraper
 # https://www.analyticsvidhya.com/blog/2019/05/scraping-classifying-youtube-video-data-python-selenium/
 # https://codereview.stackexchange.com/questions/166010/scraping-all-closed-captions-subtitles-of-a-youtubes-creators-video-library
 
-#https://www.youtube.com/results?search_query=bbc
+# is in english
+# contains talking face, 50 %
+# timestamps where model recognizes
+# list of urls from which to get the videos
 
-#https://www.youtube.com/user/TEDtalksDirector
+# https://www.youtube.com/results?search_query=bbc
 
-#https://www.youtube.com/user/bbcnews
+# https://www.youtube.com/user/TEDtalksDirector
+
+# https://www.youtube.com/user/bbcnews
 
 #need a way to quantify if a video is good or not
 #ask about the software that lines up text
 #would be nice to run this on a server that is continuously running this
 
-driver = webdriver.Chrome()
-driver.get("YOUR_LINK_HERE")
-
-ted_talk_youtube_scraper = YoutubeSubtitlesScraper('https://www.youtube.com/user/TEDtalksDirector')
+#driver = webdriver.Chrome()
+#driver.get("YOUR_LINK_HERE")
 
 
 def create_file(filename, link, subtitles):
@@ -43,10 +46,27 @@ def create_file(filename, link, subtitles):
         subtitles_file.write(subtitles)
 
 
-with ted_talk_youtube_scraper as scraper:
-    for filename, link, content in scraper.subtitles():
-        try:
-            create_file(filename, link, content)
-        except:
-            print("Can't create file for: " + filename + " : " + link)
+start_url = 'https://www.youtube.com/user/TEDtalksDirector/videos'
+
+scrapper = YoutubeSubtitlesScraper(start_url)
+scrapper.display_all_videos()
+
+videos = [(video.text, video.get_attribute("href"))
+          for video in scrapper.driver.find_elements_by_id("video-title")]
+
+for filename, link in videos:
+    scrapper.driver.get(link)
+    scrapper.enable_subtitles()
+    scrapper.toggle_sub_panel()
+
+    link = scrapper.get_subtitles_link()
+
+# if __name__ == "__main__":
+#     start_url = 'https://www.youtube.com/user/TEDtalksDirector/videos'
+#     with YoutubeSubtitlesScraper() as scraper:
+#         for filename, link, content in scraper.subtitles():
+#             try:
+#                 create_file(filename, link, content)
+#             except Exception:
+#                 print("Can't create file for: " + filename + " : " + link)
 
